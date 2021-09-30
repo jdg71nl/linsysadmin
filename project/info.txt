@@ -1,12 +1,13 @@
 # linux-system-admin / info.txt
 # - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
 
-# - - -
 # system things:
 #
+# - - -
 > apt install mlocate
 > /etc/cron.daily/mlocate 
 #
+# - - -
 > git remote -vv
 github  git@github.com:jdg71nl/linsysadmin.git (fetch)
 github  git@github.com:jdg71nl/linsysadmin.git (push)
@@ -16,7 +17,73 @@ vps5    ssh://git@vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git (push)
 From github.com:jdg71nl/linsysadmin
  * branch            main       -> FETCH_HEAD
 fatal: refusing to merge unrelated histories
-https://careerkarma.com/blog/git-fatal-refusing-to-merge-unrelated-histories/
+#
+# https://careerkarma.com/blog/git-fatal-refusing-to-merge-unrelated-histories/
+# this works:
+> git pull github main --allow-unrelated-histories
+# next rename 'default branch' master to main, first local then remote:
+> git branch -m master main
+> git push -u vps5 main
+git@vps5.dgt-bv.com's password: 
+Total 0 (delta 0), reused 0 (delta 0)
+To ssh://vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git
+ * [new branch]      main -> main
+Branch 'main' set up to track remote branch 'main' from 'vps5'.
+#
+> git logg
+* 2917cbd Thu, 30 Sep 2021 21:48:52 +0200  (HEAD -> main, vps5/master, vps5/main, vps5/HEAD, github/master) merge empty github repo, add vanila api from express-generator
+*   4532ec0 Thu, 30 Sep 2021 21:46:34 +0200  Merge branch 'main' of github.com:jdg71nl/linsysadmin
+|\  
+| * d3e1a56 Thu, 30 Sep 2021 21:41:56 +0200  (github/main) Initial commit
+* 10916f5 Thu, 30 Sep 2021 17:17:46 +0200  initial commit
+#
+> git push origin --delete master
+fatal: 'origin' does not appear to be a git repository
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights
+and the repository exists.
+--[CWD=~/dev/linux-system-admin(git:main)]--[1633031890 21:58:10 Thu 30-Sep-2021 CEST]--[jdg@rpi3-dev-83]--[hw:RPI3b+1.3,os:Raspbian-10/buster,kernel:5.10.17-v7+,isa:armv7l]------
+> git push vps5 --delete master      
+git@vps5.dgt-bv.com's password: 
+remote: error: By default, deleting the current branch is denied, because the next
+remote: 'git clone' won't result in any file checked out, causing confusion.
+remote: 
+remote: You can set 'receive.denyDeleteCurrent' configuration variable to
+remote: 'warn' or 'ignore' in the remote repository to allow deleting the
+remote: current branch, with or without a warning message.
+remote: 
+remote: To squelch this message, you can set it to 'refuse'.
+remote: error: refusing to delete the current branch: refs/heads/master
+To ssh://vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git
+ ! [remote rejected] master (deletion of the current branch prohibited)
+error: failed to push some refs to 'ssh://git@vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git'
+#
+> cat /usr/local/syssetup/syssetup-git-only.sh 
+#!/bin/bash
+git config --global user.name "John de Graaff"
+git config --global user.email john@de-graaff.net
+git config --global alias.ss "status -s"        # short status
+git config --global alias.logg "log --oneline --decorate --graph --all --pretty=format:'%C(auto)%h %aD %d %s'"
+git config --global alias.logn "log --oneline --decorate --graph --all --pretty=format:'%h - %ae - %ad : %s' --numstat"
+#
+> git config --global receive.denyDeleteCurrent "warn"
+# hmm.. does not help
+#
+# What Your Teammates Have to Do:
+# Switch to the "master" branch:
+> git checkout master
+# Rename it to "main":
+> git branch -m master main
+# Get the latest commits (and branches!) from the remote:
+> git fetch
+# Remove the existing tracking connection with "origin/master":
+> git branch --unset-upstream
+# Create a new tracking connection with the new "origin/main" branch:
+> git branch -u origin/main
+# 
+# - - -
+
+
 
 # - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
 # node & express
