@@ -1,0 +1,135 @@
+# linux-system-admin / info.txt
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+
+# - - -
+# system things:
+#
+> apt install mlocate
+> /etc/cron.daily/mlocate 
+#
+> git remote -vv
+github  git@github.com:jdg71nl/linsysadmin.git (fetch)
+github  git@github.com:jdg71nl/linsysadmin.git (push)
+vps5    ssh://git@vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git (fetch)
+vps5    ssh://git@vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git (push)
+> git pull github main
+From github.com:jdg71nl/linsysadmin
+ * branch            main       -> FETCH_HEAD
+fatal: refusing to merge unrelated histories
+https://careerkarma.com/blog/git-fatal-refusing-to-merge-unrelated-histories/
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# node & express
+> sudo -i
+> curl https://deb.nodesource.com/setup_14.x | bash
+> apt install nodejs
+> npm install express-generator -g
+# as normal user, do:
+> cd /home/jdg/dev/linux-system-admin/
+> express --no-view api
+> cd ./api/
+> cat > run-debug.sh 
+#!/bin/bash
+DEBUG=api:* npm start
+#-EOF
+> chmod +x run-debug.sh 
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# mongodb
+> sudo -i
+> apt install mongodb
+> mongo
+MongoDB shell version: 2.4.14
+connecting to: test
+Welcome to the MongoDB shell.
+For interactive help, type "help".
+For more comprehensive documentation, see http://docs.mongodb.org/
+Questions? Try the support group http://groups.google.com/group/mongodb-user
+Server has startup warnings: 
+Thu Sep 30 21:11:58.393 [initandlisten] ** NOTE: This is a 32 bit MongoDB binary.
+Thu Sep 30 21:11:58.393 [initandlisten] **       32 bit builds are limited to less than 2GB of data (or less with --journal).
+Thu Sep 30 21:11:58.393 [initandlisten] **       See http://dochub.mongodb.org/core/32bit
+#
+# https://mkyong.com/mongodb/mongodb-hello-world-example/
+> mongo
+> show dbs
+local   0.03125GB
+> use testdb
+switched to db testdb
+> db.users.insert({user:"user1",pwd:"pwd1"})
+> db.users.find()
+{ "_id" : ObjectId("61560d667f7a8de634939a3d"), "user" : "user1", "pwd" : "pwd1" }
+> show dbs
+local   0.03125GB
+testdb  0.0625GB
+> ^d
+> mongo
+> use testdb
+switched to db testdb
+> show collections
+system.indexes
+users
+#
+
+# - - -
+# mongo-express
+# https://github.com/mongo-express/mongo-express
+> sudo npm install -g mongo-express
+# fails ...
+> locate mongodb-query-parser+2.1.2.patch
+/usr/lib/node_modules/mongo-express/patches/mongodb-query-parser+2.1.2.patch
+> mv /usr/lib/node_modules/mongo-express/patches/mongodb-query-parser+2.1.2.patch /tmp
+#
+# did no help ..., again:
+> sudo npm install -g mongo-express
+npm WARN deprecated express-fileupload@0.4.0: Please upgrade express-fileupload to version 1.1.8+ due to a security vulnerability with the parseNested option
+npm WARN deprecated uuid@2.0.3: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+/usr/bin/mongo-express -> /usr/lib/node_modules/mongo-express/app.js
+> mongo-express@1.0.0-alpha.4 postinstall /usr/lib/node_modules/mongo-express
+> patch-package
+patch-package 6.4.7
+Applying patches...
+**ERROR** Failed to apply patch for package mongodb-query-parser at path
+    node_modules/mongodb-query-parser
+  This error was caused because mongodb-query-parser has changed since you
+  made the patch file for it. This introduced conflicts with your patch,
+  just like a merge conflict in Git when separate incompatible changes are
+  made to the same piece of code.
+  Maybe this means your patch file is no longer necessary, in which case
+  hooray! Just delete it!
+  Otherwise, you need to generate a new patch file.
+  To generate a new one, just repeat the steps you made to generate the first
+  one.
+  i.e. manually make the appropriate file changes, then run 
+    patch-package mongodb-query-parser
+  Info:
+    Patch file: patches/mongodb-query-parser+2.1.2.patch
+    Patch was made for version: 2.1.2
+    Installed version: 2.4.3
+---
+patch-package finished with 1 error(s).
+npm WARN notsup Unsupported engine for got@5.7.1: wanted: {"node":">=0.10.0 <7"} (current: {"node":"14.18.0","npm":"6.14.15"})
+npm WARN notsup Not compatible with your version of node/npm: got@5.7.1
++ mongo-express@1.0.0-alpha.4
+updated 1 package in 43.168s
+--[CWD=~]--[1633030099 21:28:19 Thu 30-Sep-2021 CEST]--[root@rpi3-dev-83]--[hw:RPI3b+1.3,os:Raspbian-10/buster,kernel:5.10.17-v7+,isa:armv7l]------
+#
+
+# - - -
+# mongoose
+# https://www.npmjs.com/package/mongoose
+# https://mongoosejs.com/docs/index.html
+> npm i mongoose
+# better:
+> npm install mongoose --save
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# check out tutorial 'create-react-app' to determine how build pipeline works:
+https://reactjs.org/tutorial/tutorial.html#setup-for-the-tutorial
+> npx create-react-app reactjs-tutorial
+
+
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# - - -
+#-EOF

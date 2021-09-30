@@ -1,0 +1,6 @@
+# .gitignore
+*.csv
+*.bin
+node_modules/
+code/
+#-EOF
