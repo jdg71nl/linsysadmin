@@ -1,0 +1,406 @@
+# linux-system-admin / log.txt
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+
+# system things:
+#
+# - - -
+> apt install mlocate
+> /etc/cron.daily/mlocate 
+#
+# - - -
+> git remote -vv
+github  git@github.com:jdg71nl/linsysadmin.git (fetch)
+github  git@github.com:jdg71nl/linsysadmin.git (push)
+vps5    ssh://git@vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git (fetch)
+vps5    ssh://git@vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git (push)
+> git pull github main
+From github.com:jdg71nl/linsysadmin
+ * branch            main       -> FETCH_HEAD
+fatal: refusing to merge unrelated histories
+#
+# https://careerkarma.com/blog/git-fatal-refusing-to-merge-unrelated-histories/
+# this works:
+> git pull github main --allow-unrelated-histories
+# next rename 'default branch' master to main, first local then remote:
+> git branch -m master main
+> git push -u vps5 main
+git@vps5.dgt-bv.com's password: 
+Total 0 (delta 0), reused 0 (delta 0)
+To ssh://vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git
+ * [new branch]      main -> main
+Branch 'main' set up to track remote branch 'main' from 'vps5'.
+#
+> git logg
+* 2917cbd Thu, 30 Sep 2021 21:48:52 +0200  (HEAD -> main, vps5/master, vps5/main, vps5/HEAD, github/master) merge empty github repo, add vanila api from express-generator
+*   4532ec0 Thu, 30 Sep 2021 21:46:34 +0200  Merge branch 'main' of github.com:jdg71nl/linsysadmin
+|\  
+| * d3e1a56 Thu, 30 Sep 2021 21:41:56 +0200  (github/main) Initial commit
+* 10916f5 Thu, 30 Sep 2021 17:17:46 +0200  initial commit
+#
+> git push origin --delete master
+fatal: 'origin' does not appear to be a git repository
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights
+and the repository exists.
+--[CWD=~/dev/linux-system-admin(git:main)]--[1633031890 21:58:10 Thu 30-Sep-2021 CEST]--[jdg@rpi3-dev-83]--[hw:RPI3b+1.3,os:Raspbian-10/buster,kernel:5.10.17-v7+,isa:armv7l]------
+> git push vps5 --delete master      
+git@vps5.dgt-bv.com's password: 
+remote: error: By default, deleting the current branch is denied, because the next
+remote: 'git clone' won't result in any file checked out, causing confusion.
+remote: 
+remote: You can set 'receive.denyDeleteCurrent' configuration variable to
+remote: 'warn' or 'ignore' in the remote repository to allow deleting the
+remote: current branch, with or without a warning message.
+remote: 
+remote: To squelch this message, you can set it to 'refuse'.
+remote: error: refusing to delete the current branch: refs/heads/master
+To ssh://vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git
+ ! [remote rejected] master (deletion of the current branch prohibited)
+error: failed to push some refs to 'ssh://git@vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git'
+#
+> cat /usr/local/syssetup/syssetup-git-only.sh 
+#!/bin/bash
+git config --global user.name "John de Graaff"
+git config --global user.email john@de-graaff.net
+git config --global alias.ss "status -s"        # short status
+git config --global alias.logg "log --oneline --decorate --graph --all --pretty=format:'%C(auto)%h %aD %d %s'"
+git config --global alias.logn "log --oneline --decorate --graph --all --pretty=format:'%h - %ae - %ad : %s' --numstat"
+#
+> git config --global receive.denyDeleteCurrent "warn"
+# hmm.. does not help
+#
+# What Your Teammates Have to Do:
+# Switch to the "master" branch:
+> git checkout master
+# Rename it to "main":
+> git branch -m master main
+# Get the latest commits (and branches!) from the remote:
+> git fetch
+# Remove the existing tracking connection with "origin/master":
+> git branch --unset-upstream
+# Create a new tracking connection with the new "origin/main" branch:
+> git branch -u origin/main
+# 
+# - - -
+
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# node & express
+> sudo -i
+> curl https://deb.nodesource.com/setup_14.x | bash
+> apt install nodejs
+> npm install express-generator -g
+# as normal user, do:
+> cd /home/jdg/dev/linux-system-admin/
+> express --no-view api
+> cd ./api/
+> cat > run-debug.sh 
+#!/bin/bash
+DEBUG=api:* npm start
+#-EOF
+> chmod +x run-debug.sh 
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# mongodb
+> sudo -i
+> apt install mongodb
+> mongo
+MongoDB shell version: 2.4.14
+connecting to: test
+Welcome to the MongoDB shell.
+For interactive help, type "help".
+For more comprehensive documentation, see http://docs.mongodb.org/
+Questions? Try the support group http://groups.google.com/group/mongodb-user
+Server has startup warnings: 
+Thu Sep 30 21:11:58.393 [initandlisten] ** NOTE: This is a 32 bit MongoDB binary.
+Thu Sep 30 21:11:58.393 [initandlisten] **       32 bit builds are limited to less than 2GB of data (or less with --journal).
+Thu Sep 30 21:11:58.393 [initandlisten] **       See http://dochub.mongodb.org/core/32bit
+#
+# https://mkyong.com/mongodb/mongodb-hello-world-example/
+> mongo
+> show dbs
+local   0.03125GB
+> use testdb
+switched to db testdb
+> db.users.insert({user:"user1",pwd:"pwd1"})
+> db.users.find()
+{ "_id" : ObjectId("61560d667f7a8de634939a3d"), "user" : "user1", "pwd" : "pwd1" }
+> show dbs
+local   0.03125GB
+testdb  0.0625GB
+> ^d
+> mongo
+> use testdb
+switched to db testdb
+> show collections
+system.indexes
+users
+#
+> dpkg -l | egrep 'mongodb\s'
+ii  mongodb                              1:2.4.14-4                          armhf        object/document-oriented database (metapackage)
+#
+use linsysadmin
+db.users.insert({firstname:"first1",lastname:"last1"})
+db.users.find()
+{ "_id" : ObjectId("6156217201e583d3d942cc6c"), "firstname" : "first1", "lastname" : "last1" }
+#
+> ./run-debug.sh 
+#:
+> api@0.0.0 start /home/jdg/dev/linux-system-admin/api
+> node ./bin/www
+# pub_path =  /home/jdg/dev/linux-system-admin/api/public
+  api:server Listening on port 3000 +0ms
+Could not connect to MongoDB...
+#
+# so, cant use mongodb on rpi with armhf arch ...
+# alternative?: CouchDB
+# https://blog.panoply.io/top-5-alternatives-to-mongodb
+# https://blog.panoply.io/couchdb-vs-mongodb
+#
+# .. and back .. on mongodb, now arm32:
+# https://github.com/andresvidal/rpi3-mongodb3
+> docker run -d --name rpi3-mongodb3 ... andresvidal/rpi3-mongodb3:latest ...
+# error:
+  WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm/v7) and no specific platform was requested
+# also:
+https://hub.docker.com/r/andresvidal/rpi3-mongodb3/tags?page=1&ordering=last_updated
+#
+# https://andyfelong.com/2017/08/mongodb-3-0-14-for-raspbian-stretch/
+#
+# maybe better use docker on arm32:
+> apt install docker
+Get:1 http://mirror.serverius.net/raspbian/raspbian buster/main armhf wmdocker armhf 1.5-2 [12.0 kB]
+Get:2 http://mirror.serverius.net/raspbian/raspbian buster/main armhf docker all 1.5-2 [2,556 B]
+#
+> apt purge docker 
+# https://phoenixnap.com/kb/docker-on-raspberry-pi
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker jdg
+docker run hello-world
+#
+# NOTE: "OS/Arch: linux/arm"
+#
+> sudo sh get-docker.sh
+# Executing docker install script, commit: 93d2499759296ac1f9c510605fef85052a2c32be
++ sh -c apt-get update -qq >/dev/null
++ sh -c DEBIAN_FRONTEND=noninteractive apt-get install -y -qq apt-transport-https ca-certificates curl >/dev/null
++ sh -c curl -fsSL "https://download.docker.com/linux/raspbian/gpg" | gpg --dearmor --yes -o /usr/share/keyrings/docker-archive-keyring.gpg
++ sh -c echo "deb [arch=armhf signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/raspbian buster stable" > /etc/apt/sources.list.d/docker.list
++ sh -c apt-get update -qq >/dev/null
++ sh -c DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends  docker-ce-cli docker-ce >/dev/null
++ version_gte 20.10
++ [ -z  ]
++ return 0
++ sh -c DEBIAN_FRONTEND=noninteractive apt-get install -y -qq docker-ce-rootless-extras >/dev/null
++ sh -c docker version
+Client: Docker Engine - Community
+ Version:           20.10.8
+ API version:       1.41
+ Go version:        go1.16.6
+ Git commit:        3967b7d
+ Built:             Fri Jul 30 19:55:38 2021
+ OS/Arch:           linux/arm
+ Context:           default
+ Experimental:      true
+.
+Server: Docker Engine - Community
+ Engine:
+  Version:          20.10.8
+  API version:      1.41 (minimum version 1.12)
+  Go version:       go1.16.6
+  Git commit:       75249d8
+  Built:            Fri Jul 30 19:53:31 2021
+  OS/Arch:          linux/arm
+  Experimental:     false
+ containerd:
+  Version:          1.4.9
+  GitCommit:        e25210fe30a0a703442421b0f60afac609f950a3
+ runc:
+  Version:          1.0.1
+  GitCommit:        v1.0.1-0-g4144b63
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+================================================================================
+To run Docker as a non-privileged user, consider setting up the
+Docker daemon in rootless mode for your user:
+    dockerd-rootless-setuptool.sh install
+Visit https://docs.docker.com/go/rootless/ to learn about rootless mode.
+To run the Docker daemon as a fully privileged service, but granting non-root
+users access, refer to https://docs.docker.com/go/daemon-access/
+WARNING: Access to the remote API on a privileged Docker daemon is equivalent
+         to root access on the host. Refer to the 'Docker daemon attack surface'
+         documentation for details: https://docs.docker.com/go/attack-surface/
+================================================================================
+#
+#
+https://hub.docker.com/r/webhippie/mongodb
+docker pull webhippie/mongodb
+# pff..
+# 
+# let's look at leightweight file document-based DB, like: LokiJS or NeDB
+https://stackoverflow.com/questions/7233057/lightweight-javascript-db-for-use-in-node-js
+https://github.com/louischatriot/nedb
+https://github.com/techfort/LokiJS
+https://techfort.github.io/LokiJS/
+
+# - - -
+# mongo-express
+# https://github.com/mongo-express/mongo-express
+> sudo npm install -g mongo-express
+# fails ...
+> locate mongodb-query-parser+2.1.2.patch
+/usr/lib/node_modules/mongo-express/patches/mongodb-query-parser+2.1.2.patch
+> mv /usr/lib/node_modules/mongo-express/patches/mongodb-query-parser+2.1.2.patch /tmp
+#
+# did no help ..., again:
+> sudo npm install -g mongo-express
+npm WARN deprecated express-fileupload@0.4.0: Please upgrade express-fileupload to version 1.1.8+ due to a security vulnerability with the parseNested option
+npm WARN deprecated uuid@2.0.3: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+/usr/bin/mongo-express -> /usr/lib/node_modules/mongo-express/app.js
+> mongo-express@1.0.0-alpha.4 postinstall /usr/lib/node_modules/mongo-express
+> patch-package
+patch-package 6.4.7
+Applying patches...
+**ERROR** Failed to apply patch for package mongodb-query-parser at path
+    node_modules/mongodb-query-parser
+  This error was caused because mongodb-query-parser has changed since you
+  made the patch file for it. This introduced conflicts with your patch,
+  just like a merge conflict in Git when separate incompatible changes are
+  made to the same piece of code.
+  Maybe this means your patch file is no longer necessary, in which case
+  hooray! Just delete it!
+  Otherwise, you need to generate a new patch file.
+  To generate a new one, just repeat the steps you made to generate the first
+  one.
+  i.e. manually make the appropriate file changes, then run 
+    patch-package mongodb-query-parser
+  Info:
+    Patch file: patches/mongodb-query-parser+2.1.2.patch
+    Patch was made for version: 2.1.2
+    Installed version: 2.4.3
+---
+patch-package finished with 1 error(s).
+npm WARN notsup Unsupported engine for got@5.7.1: wanted: {"node":">=0.10.0 <7"} (current: {"node":"14.18.0","npm":"6.14.15"})
+npm WARN notsup Not compatible with your version of node/npm: got@5.7.1
++ mongo-express@1.0.0-alpha.4
+updated 1 package in 43.168s
+--[CWD=~]--[1633030099 21:28:19 Thu 30-Sep-2021 CEST]--[root@rpi3-dev-83]--[hw:RPI3b+1.3,os:Raspbian-10/buster,kernel:5.10.17-v7+,isa:armv7l]------
+#
+
+# - - -
+# mongoose
+# https://www.npmjs.com/package/mongoose
+# https://mongoosejs.com/docs/index.html
+> npm i mongoose
+# better:
+> npm install mongoose --save
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# CouchDB
+# https://couchdb.apache.org/
+# https://docs.couchdb.org/en/latest/install/unix.html#installation-using-the-apache-couchdb-convenience-binary-packages
+> sudo apt update && sudo apt install -y curl apt-transport-https gnupg
+> curl https://couchdb.apache.org/repo/keys.asc | gpg --dearmor | sudo tee /usr/share/keyrings/couchdb-archive-keyring.gpg >/dev/null 2>&1
+> source /etc/os-release
+> echo "deb [signed-by=/usr/share/keyrings/couchdb-archive-keyring.gpg] https://apache.jfrog.io/artifactory/couchdb-deb/ ${VERSION_CODENAME} main" | sudo tee /etc/apt/sources.list.d/couchdb.list
+> sudo apt update
+> sudo apt install -y couchdb
+N: Skipping acquire of configured file 'main/binary-armhf/Packages' as repository 'https://apache.jfrog.io/artifactory/couchdb-deb buster InRelease' doesn't support architecture 'armhf'
+# 
+# .. also does not work, next check: redis
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# Redis
+# https://redis.io/
+> sudo apt install redis
+Get:5 http://mirror.serverius.net/raspbian/raspbian buster/main armhf redis-tools armhf 5:5.0.3-4+deb10u3 [447 kB]
+Get:6 http://mirror.serverius.net/raspbian/raspbian buster/main armhf redis-server armhf 5:5.0.3-4+deb10u3 [78.5 kB]
+Get:7 http://mirror.serverius.net/raspbian/raspbian buster/main armhf redis all 5:5.0.3-4+deb10u3 [45.3 kB]
+#
+# https://www.npmjs.com/search?q=redis&ranking=maintenance
+# https://www.npmjs.com/package/redis
+# https://docs.redis.com/latest/rs/references/client_references/client_nodejs/
+> npm i redis --save
+#
+# https://www.npmjs.com/package/bluebird
+> npm i bluebird --save
+# pff..
+# mabye: https://github.com/newghost/redblade
+# 
+# https://codeforgeek.com/node-js-redis-tutorial-installation-commands/
+# pfff...
+#
+# maybe better look for arm32 mogodb alternative ....
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# LokiJS
+https://github.com/techfort/LokiJS
+https://techfort.github.io/LokiJS/
+> npm install lokijs --save
+# pff...
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# TingoDB
+# "TingoDB is an embedded JavaScript in-process filesystem or in-memory database upwards compatible with MongoDB at the v1.4 API level."
+https://github.com/sergeyksv/tingodb
+http://www.tingodb.com/
+# "TingoDB is embedded JavaScript NoSql database for Node.js and node-webkit. Its API and features designed to be upward compatible with MongoDB and its driver for Node.js. ... It is even possible to adopt some derivative libraries that depends on MongoDB. Good example it Mongoose.js ODM library that can be connected with TingoDB using Tungus driver."
+https://github.com/sergeyksv/tungus
+> npm install tingodb --save
+> npm install tungus --save
+
+https://github.com/npm/node-semver
+http://fredkschott.com/post/2014/02/npm-no-longer-defaults-to-tildes/
+
+> sudo apt install jq
+> jq .dependencies.mongoose package.json 
+"^6.0.8"
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# LowDB
+#
+https://github.com/typicode/lowdb
+https://www.npmjs.com/package/lowdb
+
+npm i lowdb --save
+
+npm uninstall mongoose
+npm uninstall bluebird
+npm uninstall lokijs
+npm uninstall redis
+npm uninstall tingodb
+npm uninstall tungus
+
+npm install lodash --save
+
+https://simonplend.com/what-you-need-to-know-about-es-modules-in-node-js/
+https://pencilflip.medium.com/using-es-modules-with-commonjs-modules-in-node-js-1015786dab03
+
+
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# run 'reverse proxy' on apache2
+#
+# https://www.atlantic.net/dedicated-server-hosting/how-to-configure-reverse-proxy-for-node-js-application-using-apache-on-ubuntu-20-04/
+# also do: > a2enmod proxy proxy_http rewrite headers expires
+#
+# add in apache2-site.conf:
+ ProxyRequests Off
+ ProxyPreserveHost On
+ ProxyVia Full
+ <Proxy *>
+   Require all granted
+ </Proxy>
+ ProxyPass        /code/63995848/dashboard http://10.212.21.80
+ ProxyPassReverse /code/63995848/dashboard http://10.212.21.80
+#
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# check out tutorial 'create-react-app' to determine how build pipeline works:
+https://reactjs.org/tutorial/tutorial.html#setup-for-the-tutorial
+> npx create-react-app reactjs-tutorial
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+#-EOF

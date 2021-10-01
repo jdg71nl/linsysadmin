@@ -1,16 +1,29 @@
 var express = require('express');
 var userRouter = express.Router();
-// npm i joi --save
 const Joi = require('joi');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
-  firstname: { type: String, required: true},
-  lastname: { type: String, required: true},
-}
-,{ timestamps: true }   // key: createdAt, updatedAt
-);
-const User = mongoose.model('User', userSchema);
+// let loki_db = require('../app').loki_db;
+// let users = loki_db.addCollection('users');
+// users.insert({});
+// users.insert([{},{}]);
+// var many = users.find({ age: {'$gte': 35} });
+// var one = users.findOne({ name:'Odin' });
+// var results = users.where(function(obj) { return (obj.age >= 35); });
+// var results = users.chain().find({ age: {'$gte': 35} }).simplesort('name').data();
+// var tyrfing = items.findOne({'name': 'tyrfing'});
+// tyrfing.owner = 'arngrim';
+// items.update(tyrfing);
+
+let low_db = require('../app').low_db;
+
+// const userSchema = new mongoose.Schema({
+//   firstname: { type: String, required: true},
+//   lastname: { type: String, required: true},
+// }
+// ,{ timestamps: true }   // key: createdAt, updatedAt
+// );
+// const User = mongoose.model('User', userSchema);
 
 userRouter.get('/', async (req, res) => {
   try {
@@ -21,7 +34,10 @@ userRouter.get('/', async (req, res) => {
     // console.log("# my_query", my_query);
     // console.log("# my_last", my_last);
     let get_users = [];
-    get_users = await User.find().sort({_id:-1}).limit(my_last)
+    // get_users = await User.find().sort({_id:-1}).limit(my_last)
+    // get_users = [{placeholder:true}];
+    // get_users = users.chain().find().simplesort('firstname').data();
+    get_users = low_db.users || [];
     res.send(get_users);
   } catch(err) {
     console.log("error " + err);
@@ -49,7 +65,11 @@ userRouter.get('/', async (req, res) => {
 // 504 Gateway Timeout
 
 userRouter.get('/:id', async (req, res) => {
-  const get_user = await User.findById(req.params.id);
+  const req_params_id = req.params.id || 0;
+  // const get_user = await User.findById(req.params.id);
+  // const get_user = {placeholder:true};
+  // const get_user = low_db.users.find({id: req_params_id});
+  const get_user = db.chain.get('users').find({ id: req_params_id }).value() // Important: value() needs to be called to execute chain
   if (!get_user) return res.status(404).send('The User with the given ID was not found.');
   res.send(get_user);
 });
@@ -57,6 +77,8 @@ userRouter.get('/:id', async (req, res) => {
 userRouter.post('/', async (req, res) => {
   // https://stackoverflow.com/questions/10849687/express-js-how-to-get-remote-client-address
   // let remoteAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress 
+  // {"firstname":"first1","lastname":"last1"}
+  console.log(`# (post) req.body="${ JSON.stringify(req.body) }" `);
   const { error } = validateUser(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
   try {
@@ -64,9 +86,15 @@ userRouter.post('/', async (req, res) => {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
     };
-    let new_user = new User(new_user_hash);
+    // let new_user = new User(new_user_hash);
     // console.log("# new_user", new_user);
-    new_user = await new_user.save();
+    // new_user = await new_user.save();
+    // let new_user = {placeholder:true};
+    // let new_user = new_user_hash;
+    // users.insert(new_user);
+    const new_user = new_user_hash;
+    low_db.data.users.push(new_user);
+    await low_db.write();
     res.send(new_user);
   } catch(err) {
     console.log("error " + err);
@@ -76,15 +104,17 @@ userRouter.post('/', async (req, res) => {
 userRouter.put('/:id', async (req, res) => {
   const { error } = validateUser(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
-  const edit_user = await User.findByIdAndUpdate(req.params.id, { firstname: req.body.firstname }, {
-    new: true
-  });
+  // const edit_user = await User.findByIdAndUpdate(req.params.id, { firstname: req.body.firstname }, {
+  //   new: true
+  // });
+  const edit_user = {placeholder:true};
   if (!edit_user) return res.status(404).send('The User with the given ID was not found.');
   res.send(edit_user);
 });
 
 userRouter.delete('/:id', async (req, res) => {
-  const del_user = await User.findByIdAndRemove(req.params.id);
+  // const del_user = await User.findByIdAndRemove(req.params.id);
+  const del_user = {placeholder:true};
   if (!del_user) return res.status(404).send('The User with the given ID was not found.');
   res.send(del_user);
 });
