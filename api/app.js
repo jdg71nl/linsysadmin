@@ -27,6 +27,12 @@ var lodash = require('lodash');
 //   .catch(err => console.error('Could not connect to MongoDB...'))
 // ;
 
+const Jifdb = require('./jifdb').class;
+const jifdb = new Jifdb({db_path: path.join(__dirname, 'db')});
+jifdb.open_database();
+// let users = jifdb.open_collection({collection_name: "users"});
+// // console.log(`# jfdb=${jfdb} `);
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -135,7 +141,12 @@ function isObject(val) {
   return ( (typeof val === 'function') || (typeof val === 'object') );
 }
 
-module.exports = app;
+// module.exports = app;
+
+module.exports = {
+  app: app,
+  jifdb: jifdb,
+};
 
 // module.exports = {
 //   app: app,

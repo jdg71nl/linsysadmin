@@ -25,6 +25,14 @@ const Joi = require('joi');
 // );
 // const User = mongoose.model('User', userSchema);
 
+const path = require('path');
+
+// const Jifdb = require('../jifdb').class;
+// const jifdb = new Jifdb({db_path: path.join(__dirname, 'db')});
+const jif_db = require('../app').jif_db;
+let users = jif_db.open_collection({collection_name: "users"});
+// console.log(`# jfdb=${jfdb} `);
+
 userRouter.get('/', async (req, res) => {
   try {
     let my_query = req.query;
@@ -35,9 +43,10 @@ userRouter.get('/', async (req, res) => {
     // console.log("# my_last", my_last);
     let get_users = [];
     // get_users = await User.find().sort({_id:-1}).limit(my_last)
-    get_users = [{placeholder:true}];
+    // get_users = [{placeholder:true}];
     // get_users = users.chain().find().simplesort('firstname').data();
     // get_users = low_db.users || [];
+    get_users = users.data;
     res.send(get_users);
   } catch(err) {
     console.log("error " + err);
@@ -67,9 +76,10 @@ userRouter.get('/', async (req, res) => {
 userRouter.get('/:id', async (req, res) => {
   const req_params_id = req.params.id || 0;
   // const get_user = await User.findById(req.params.id);
-  const get_user = {placeholder:true, id:req_params_id};
+  // const get_user = {placeholder:true, id:req_params_id};
   // const get_user = low_db.users.find({id: req_params_id});
   // const get_user = db.chain.get('users').find({ id: req_params_id }).value() // Important: value() needs to be called to execute chain
+  const get_user = users.data.find(item => item.id == id);
   if (!get_user) return res.status(404).send('The User with the given ID was not found.');
   res.send(get_user);
 });
@@ -89,12 +99,13 @@ userRouter.post('/', async (req, res) => {
     // let new_user = new User(new_user_hash);
     // console.log("# new_user", new_user);
     // new_user = await new_user.save();
-    let new_user = {placeholder:true};
+    // let new_user = {placeholder:true};
     // let new_user = new_user_hash;
     // users.insert(new_user);
     // const new_user = new_user_hash;
     // low_db.data.users.push(new_user);
     // await low_db.write();
+    let new_user = users.add_item(new_user_hash);
     res.send(new_user);
   } catch(err) {
     console.log("error " + err);
