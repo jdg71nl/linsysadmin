@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 
+// // use “require” in ES module scope, you have to define it. Just two lines of code:
+// import { createRequire } from "module";
+// const require = createRequire(import.meta.url);
+
 /**
  * Module dependencies.
  */
 
-// var app = require('../app');
-var app = require('../app').app;
+var app = require('../app');
+// var app = require('../app').app;
 var debug = require('debug')('api:server');
 var http = require('http');
 

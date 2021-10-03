@@ -1,3 +1,11 @@
+// app.js
+
+// https://www.kindacode.com/article/node-js-how-to-use-import-and-require-in-the-same-file/
+// What if you want to use both “require” and “import” in the same file? Is it possible? The answer is “Yes” but you have to some extra things. Otherwise, you will get the following error:
+// use “require” in ES module scope, you have to define it. Just two lines of code:
+// import { createRequire } from "module";
+// const require = createRequire(import.meta.url);
+
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -96,41 +104,43 @@ app.use('/api/users', usersRouter);
 // tyrfing.owner = 'arngrim';
 // items.update(tyrfing);
 
-import { Low, JSONFile } from 'lowdb';
-// var { Low, JSONFile } = require('lowdb');
-const lowdb_file = join(__dirname, '/db/db.json');
-const lowdb_adapter = new JSONFile(lowdb_file);
-const low_db = new Low(lowdb_adapter);
-(async function(){
-  await low_db.read();
-  // low_db.data ||= { users: [] };
-  if (!low_db.data) {
-    low_db.data = { users: [] };
-  }
-  low_db.chain = lodash.chain(low_db.data);
-  });
-// // Instead of db.data, you can now use db.chain if you want to use the powerful API that lodash provides
-// const post = db.chain
-//   .get('posts')
-//   .find({ id: 1 })
-//   .value() // Important: value() needs to be called to execute chain
-// db.data.posts.push('hello world')
-// db.data.posts[0]
-// const { posts } = db.data
-// posts.push('hello world')
-// await db.write()
+// import { Low, JSONFile } from 'lowdb';
+// // const lowdb = require('lowdb');
+// // const Low = lowdb.Low;
+// // const JSONFile = lowdb.JSONFile;
+// const lowdb_file = join(__dirname, '/db/db.json');
+// const lowdb_adapter = new JSONFile(lowdb_file);
+// const low_db = new Low(lowdb_adapter);
+// (async function(){
+//   await low_db.read();
+//   // low_db.data ||= { users: [] };
+//   if (!low_db.data) {
+//     low_db.data = { users: [] };
+//   }
+//   low_db.chain = lodash.chain(low_db.data);
+//   });
+// // // Instead of db.data, you can now use db.chain if you want to use the powerful API that lodash provides
+// // const post = db.chain
+// //   .get('posts')
+// //   .find({ id: 1 })
+// //   .value() // Important: value() needs to be called to execute chain
+// // db.data.posts.push('hello world')
+// // db.data.posts[0]
+// // const { posts } = db.data
+// // posts.push('hello world')
+// // await db.write()
 
 function isObject(val) {
   if (val === null) { return false;}
   return ( (typeof val === 'function') || (typeof val === 'object') );
 }
 
-// module.exports = app;
+module.exports = app;
 
-module.exports = {
-  app: app,
-  low_db: low_db,
-};
+// module.exports = {
+//   app: app,
+//   low_db: low_db,
+// };
 
 // module.exports = {
 //   app: app,

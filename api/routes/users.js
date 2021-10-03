@@ -15,7 +15,7 @@ const Joi = require('joi');
 // tyrfing.owner = 'arngrim';
 // items.update(tyrfing);
 
-let low_db = require('../app').low_db;
+// let low_db = require('../app').low_db;
 
 // const userSchema = new mongoose.Schema({
 //   firstname: { type: String, required: true},
@@ -35,9 +35,9 @@ userRouter.get('/', async (req, res) => {
     // console.log("# my_last", my_last);
     let get_users = [];
     // get_users = await User.find().sort({_id:-1}).limit(my_last)
-    // get_users = [{placeholder:true}];
+    get_users = [{placeholder:true}];
     // get_users = users.chain().find().simplesort('firstname').data();
-    get_users = low_db.users || [];
+    // get_users = low_db.users || [];
     res.send(get_users);
   } catch(err) {
     console.log("error " + err);
@@ -67,9 +67,9 @@ userRouter.get('/', async (req, res) => {
 userRouter.get('/:id', async (req, res) => {
   const req_params_id = req.params.id || 0;
   // const get_user = await User.findById(req.params.id);
-  // const get_user = {placeholder:true};
+  const get_user = {placeholder:true, id:req_params_id};
   // const get_user = low_db.users.find({id: req_params_id});
-  const get_user = db.chain.get('users').find({ id: req_params_id }).value() // Important: value() needs to be called to execute chain
+  // const get_user = db.chain.get('users').find({ id: req_params_id }).value() // Important: value() needs to be called to execute chain
   if (!get_user) return res.status(404).send('The User with the given ID was not found.');
   res.send(get_user);
 });
@@ -89,12 +89,12 @@ userRouter.post('/', async (req, res) => {
     // let new_user = new User(new_user_hash);
     // console.log("# new_user", new_user);
     // new_user = await new_user.save();
-    // let new_user = {placeholder:true};
+    let new_user = {placeholder:true};
     // let new_user = new_user_hash;
     // users.insert(new_user);
-    const new_user = new_user_hash;
-    low_db.data.users.push(new_user);
-    await low_db.write();
+    // const new_user = new_user_hash;
+    // low_db.data.users.push(new_user);
+    // await low_db.write();
     res.send(new_user);
   } catch(err) {
     console.log("error " + err);
