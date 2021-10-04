@@ -28,9 +28,9 @@ var lodash = require('lodash');
 // ;
 
 const Jifdb = require('./jifdb').class;
-const jifdb = new Jifdb({db_path: path.join(__dirname, 'db')});
-jifdb.open_database();
-// let users = jifdb.open_collection({collection_name: "users"});
+const jif_db = new Jifdb({db_path: path.join(__dirname, 'db')});
+jif_db.open_database();
+// let users = jif_db.open_collection({collection_name: "users"});
 // // console.log(`# jfdb=${jfdb} `);
 
 var indexRouter = require('./routes/index');
@@ -145,7 +145,7 @@ function isObject(val) {
 
 module.exports = {
   app: app,
-  jifdb: jifdb,
+  jif_db: jif_db,
 };
 
 // module.exports = {

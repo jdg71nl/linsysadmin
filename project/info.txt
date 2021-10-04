@@ -1,8 +1,52 @@
 # linux-system-admin / info.txt
 # - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
 
-npm install joi --save
-npm install lokijs --save
+linsam = linux-system-admin
+- linsam-client = React client-side Web-app
+- linsam-server = Node.js/Express server-side API
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# linsam-server
+
+> sudo -i
+> curl https://deb.nodesource.com/setup_14.x | bash
+> apt install nodejs
+
+> npm install joi --save
+> npm install lodash --save
+
+> sudo -i
+> npm install express-generator -g
+
+# as normal user, do:
+> cd /home/jdg/dev/linux-system-admin/
+# before: > express --no-view api
+> express --no-view linsam-server
+
+# before: > cd api/
+> cd linsam-server/
+linsam-server
+> cat > run-debug.sh 
+#!/bin/bash
+DEBUG=api:* npm start
+#-EOF
+> chmod +x run-debug.sh 
+
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# linsam-client
+
+# https://github.com/facebook/create-react-app
+# https://create-react-app.dev/
+
+> cd /home/jdg/dev/linux-system-admin/
+> npx create-react-app linsam-client
+> cd linsam-client/
+> npm start
+
+> npm install primereact --save
+> npm install primeicons --save
+
 
 # - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
 # - - -
