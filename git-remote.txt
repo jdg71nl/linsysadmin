@@ -1,8 +1,19 @@
 # git-remote.txt
 
+> git remote -vv
 github  git@github.com:jdg71nl/linsysadmin.git (fetch)
 github  git@github.com:jdg71nl/linsysadmin.git (push)
 vps5    ssh://git@vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git (fetch)
 vps5    ssh://git@vps5.dgt-bv.com:2221/opt/git/linux-system-admin.git (push)
+
+# we commit in branch 'main'
+> git push
+# = git push vps5 main
+> git push github
+# = git push github main
+
+> git logg
+* 6142d86 Tue, 5 Oct 2021 11:34:54 +0200  (HEAD -> main, vps5/main, github/main) commit new module JifDB not working yet, also git-remote.txt
+* c51d273 Mon, 4 Oct 2021 08:36:58 +0200  some
 
 #-EOF
