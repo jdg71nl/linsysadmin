@@ -31,11 +31,16 @@ function isObject(val) {
 // const jifdb = new Jifdb({db_path: path.join(__dirname, 'db')});
 // let users = jifdb.open_collection({collection_name: "users"});
 //
-class Jifdb {
+const Jifdb = class {
   constructor(props) {
     // call like this:
     // const jifdb = new Jifdb({db_path: path.join(__dirname, 'db')});
     // if (not exist db_path) then error ..
+
+    // private:
+    // var collections;
+
+    // public:
     this._my_classname = 'Jifdb';
     this.db_path = props.db_path;
     this.collections = {};
@@ -46,19 +51,22 @@ class Jifdb {
   // getInstance() {
   //   return this.instance
   // }
-  prototypeopen_collection(props) {
+  open_collection(props) {
     // call like this:
     // let users = jifdb.open_collection({collection_name: "users"});
     // if (not valid name collection_name) then error ..
     const col_name = props.collection_name;
-    let file_path = path.join(this.db_path, col_name, ".json");
+    let file_path = path.join(this.db_path, col_name + ".json");
+    // console.log(`# (open_collection) file_path=${file_path}`);
+    let new_collection = null;
     if (!Object.keys(this.collections).includes(col_name)) { // else return default 'null'
       //
-      const new_collection = new Jifcollection({collection_name: col_name, file_path: file_path});
+      new_collection = new Jifcollection({collection_name: col_name, file_path: file_path});
       //
       if (fs.existsSync(file_path)) {
         new_collection._read_file();
       } else {
+        console.log(`# (open_collection) touch (file_path): ${file_path} ..`);
         fs.closeSync(fs.openSync(file_path, 'w'));
         new_collection._empty_file();
       }
@@ -90,21 +98,34 @@ class Jifcollection {
     this.next_id = 1;
   }
   _read_file() {
-    this.data = fs.readFileSync(file_path, 'utf8');
+    //
+    // https://stackoverflow.com/questions/48818415/json-parsefs-readfilesync-returning-a-buffer-string-of-numbers
+    // const buffer = fs.readFileSync(this.file_path, 'utf8');
+    // this.data = JSON.parse(buffer);
+    this.data = JSON.parse(fs.readFileSync(this.file_path, 'utf8'));
+    //
     // next: find max id
     // https://www.danvega.dev/blog/2019/03/14/find-max-array-objects-javascript/
     const max_id = Math.max(...this.data.map(item => item._id));
     this.next_id = max_id + 1;
   }
   add_item(item) {
+    let new_item = null;
     if (item && isObject(item)) {
       item._id = this.next_id;
       this.next_id = this.next_id + 1;
       this.data.push(item);
-      return item;
-    } else {
-      return null;
-    }   
+      // return item;
+      new_item = item;
+    // } else {
+    //   return null;
+    }
+    const JsonString = JSON.stringify(this.data, null, 2);
+    try {
+      fs.writeFileSync(this.file_path, JsonString);
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 
