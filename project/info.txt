@@ -2,8 +2,8 @@
 # - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
 
 linsam = linux-system-admin
-- linsam-client = React client-side Web-app
-- linsam-server = Node.js/Express server-side API
+- linsam-webclient = React client-side Web-app
+- linsam-webserver = Node.js/Express server-side API
 
 # - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
 # linsam-server

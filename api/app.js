@@ -10,7 +10,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var lodash = require('lodash');
+// var lodash = require('lodash');
 
 // const mongoose = require('mongoose');
 // // mongoose.connect('mongodb://localhost/linsysadmin')
@@ -30,7 +30,7 @@ var lodash = require('lodash');
 const Jifdb = require('./jifdb').class;
 const jif_db = new Jifdb({db_path: path.join(__dirname, 'db')});
 jif_db.open_database();
-// let users = jif_db.open_collection({collection_name: "users"});
+let users = jif_db.open_collection({collection_name: "users"});
 // // console.log(`# jfdb=${jfdb} `);
 
 var indexRouter = require('./routes/index');
@@ -146,6 +146,7 @@ function isObject(val) {
 module.exports = {
   app: app,
   jif_db: jif_db,
+  users: users,
 };
 
 // module.exports = {

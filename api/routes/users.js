@@ -29,8 +29,9 @@ const path = require('path');
 
 // const Jifdb = require('../jifdb').class;
 // const jifdb = new Jifdb({db_path: path.join(__dirname, 'db')});
-const jif_db = require('../app').jif_db;
-let users = jif_db.open_collection({collection_name: "users"});
+// const jif_db = require('../app').jif_db;
+// let users = jif_db.open_collection({collection_name: "users"});
+const users = require('../app').users;
 // console.log(`# jfdb=${jfdb} `);
 
 userRouter.get('/', async (req, res) => {
