@@ -27,11 +27,13 @@ var logger = require('morgan');
 //   .catch(err => console.error('Could not connect to MongoDB...'))
 // ;
 
-const Jifdb = require('./jifdb').class;
-const jif_db = new Jifdb({db_path: path.join(__dirname, 'db')});
-jif_db.open_database();
-let users = jif_db.open_collection({collection_name: "users"});
+// const Jifdb = require('./jifdb').class;
+// const jif_db = new Jifdb({db_path: path.join(__dirname, 'db')});
+// jif_db.open_database();
+// let users = jif_db.get_collection({collection_name: "users"});
 // // console.log(`# jfdb=${jfdb} `);
+const jif_db = require('./jifdb');
+jif_db.open_database({ db_path: path.join(__dirname, 'db') });
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -141,13 +143,13 @@ function isObject(val) {
   return ( (typeof val === 'function') || (typeof val === 'object') );
 }
 
-// module.exports = app;
+module.exports = app;
 
-module.exports = {
-  app: app,
-  jif_db: jif_db,
-  users: users,
-};
+// module.exports = {
+//   app: app,
+//   jif_db: jif_db,
+//   users: users,
+// };
 
 // module.exports = {
 //   app: app,

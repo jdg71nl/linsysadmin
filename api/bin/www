@@ -8,8 +8,8 @@
  * Module dependencies.
  */
 
-// var app = require('../app');
-var app = require('../app').app;
+var app = require('../app');
+// var app = require('../app').app;
 var debug = require('debug')('api:server');
 var http = require('http');
 

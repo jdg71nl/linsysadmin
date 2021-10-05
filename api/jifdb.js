@@ -29,10 +29,10 @@ function isObject(val) {
 // usage:
 // const Jifdb = require('./jifdb').class;
 // const jifdb = new Jifdb({db_path: path.join(__dirname, 'db')});
-// let users = jifdb.open_collection({collection_name: "users"});
+// let users = jifdb.get_collection({collection_name: "users"});
 //
 const Jifdb = class {
-  constructor(props) {
+  constructor() {
     // call like this:
     // const jifdb = new Jifdb({db_path: path.join(__dirname, 'db')});
     // if (not exist db_path) then error ..
@@ -42,31 +42,34 @@ const Jifdb = class {
 
     // public:
     this._my_classname = 'Jifdb';
-    this.db_path = props.db_path;
+    this.db_path = '';
     this.collections = {};
   }
-  open_database() {
+  open_database(props) {
+    this.db_path = props.db_path;
     console.log(`Jifdb: open db on path "${this.db_path}" success`);
   }
   // getInstance() {
   //   return this.instance
   // }
-  open_collection(props) {
+  get_collection(props) {
     // call like this:
-    // let users = jifdb.open_collection({collection_name: "users"});
+    // let users = jifdb.get_collection({collection_name: "users"});
     // if (not valid name collection_name) then error ..
     const col_name = props.collection_name;
     let file_path = path.join(this.db_path, col_name + ".json");
-    // console.log(`# (open_collection) file_path=${file_path}`);
+    // console.log(`# (get_collection) file_path=${file_path}`);
     let new_collection = null;
-    if (!Object.keys(this.collections).includes(col_name)) { // else return default 'null'
+    if (Object.keys(this.collections).includes(col_name)) { // else return default 'null'
+      new_collection = this.collections[col_name];
+    } else {
       //
       new_collection = new Jifcollection({collection_name: col_name, file_path: file_path});
       //
       if (fs.existsSync(file_path)) {
         new_collection._read_file();
       } else {
-        console.log(`# (open_collection) touch (file_path): ${file_path} ..`);
+        console.log(`# (get_collection) touch (file_path): ${file_path} ..`);
         fs.closeSync(fs.openSync(file_path, 'w'));
         new_collection._empty_file();
       }
@@ -86,7 +89,7 @@ const Jifdb = class {
 class Jifcollection {
   constructor(props) {
     // call like this:
-    // let users = jifdb.open_collection({collection_name: "users"});
+    // let users = jifdb.get_collection({collection_name: "users"});
     this._my_classname = 'Jifcollection';
     this.collection_name = props.collection_name;
     this.file_path = props.file_path;
@@ -100,9 +103,14 @@ class Jifcollection {
   _read_file() {
     //
     // https://stackoverflow.com/questions/48818415/json-parsefs-readfilesync-returning-a-buffer-string-of-numbers
-    // const buffer = fs.readFileSync(this.file_path, 'utf8');
-    // this.data = JSON.parse(buffer);
-    this.data = JSON.parse(fs.readFileSync(this.file_path, 'utf8'));
+    try {
+      const buffer = fs.readFileSync(this.file_path, 'utf8');
+      if (buffer != '') {
+        this.data = JSON.parse(buffer);
+      }
+  } catch (err) {
+      console.error(err);
+    }
     //
     // next: find max id
     // https://www.danvega.dev/blog/2019/03/14/find-max-array-objects-javascript/
@@ -110,16 +118,20 @@ class Jifcollection {
     this.next_id = max_id + 1;
   }
   add_item(item) {
-    let new_item = null;
+    let new_item = {};
     if (item && isObject(item)) {
-      item._id = this.next_id;
+      new_item = item; // create copy
+      new_item._id = this.next_id;
       this.next_id = this.next_id + 1;
-      this.data.push(item);
-      // return item;
-      new_item = item;
-    // } else {
-    //   return null;
+      this.data.push(new_item);
+      // console.log(`# (Jifcollection.add_item) push: new_item=${JSON.stringify(new_item)} `);
+      this.save();
+    } else {
+      console.log(`# (Jifcollection.add_item) error is not "(item && isObject(item))" item=${JSON.stringify(item)} `);
     }
+    return new_item;
+  }
+  save() {
     const JsonString = JSON.stringify(this.data, null, 2);
     try {
       fs.writeFileSync(this.file_path, JsonString);
@@ -129,8 +141,13 @@ class Jifcollection {
   }
 }
 
-module.exports = {
-  class: Jifdb
-};
+var jif_db = new Jifdb();
+
+module.exports = jif_db;
+
+// module.exports = {
+//   class: Jifdb,
+//   jif_db: jif_db,
+// };
 
 //-EOF

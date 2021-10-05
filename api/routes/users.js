@@ -31,7 +31,11 @@ const path = require('path');
 // const jifdb = new Jifdb({db_path: path.join(__dirname, 'db')});
 // const jif_db = require('../app').jif_db;
 // let users = jif_db.open_collection({collection_name: "users"});
-const users = require('../app').users;
+// const users = require('../app').users;
+// const jif_db = require('../jifdb').jif_db;
+// let users = jif_db.get_collection({collection_name: "users"});
+const jif_db = require('../jifdb');
+let users = jif_db.get_collection({collection_name: "users"});
 // console.log(`# jfdb=${jfdb} `);
 
 userRouter.get('/', async (req, res) => {
@@ -131,10 +135,12 @@ userRouter.delete('/:id', async (req, res) => {
   res.send(del_user);
 });
 
+// https://joi.dev/api/?v=17.4.2
 function validateUser(User) {
   const schema = Joi.object({
     firstname: Joi.string().required(),
     lastname: Joi.string().required(),
+    // _id: Joi.any().forbidden(),
   });  
   const validation = schema.validate(User);
   return validation;
