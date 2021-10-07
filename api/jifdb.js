@@ -1,6 +1,8 @@
 // jifdb.js
 // = a 'JSON File Database' is a minimalist CommonJS module using a JSON file backend and CRUD accessors
 
+// https://github.com/jdg71nl/jifdb
+
 // node wraps a module inside a 'Module Wrapper Function', like this:
 // (function (exports, require, module, __filename, __dirname) {
 //   // here the contents of the module file ..

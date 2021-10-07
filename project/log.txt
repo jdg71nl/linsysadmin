@@ -403,4 +403,91 @@ https://reactjs.org/tutorial/tutorial.html#setup-for-the-tutorial
 > npx create-react-app reactjs-tutorial
 
 # - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
+# jifdb package:
+
+--[CWD=~/dev/jifdb(git:main)]--[1633589460 08:51:00 Thu 07-Oct-2021 CEST]--[jdg@rpi3-dev-83]--[hw:RPI3b+1.3,os:Raspbian-10/buster,kernel:5.10.17-v7+,isa:armv7l]------
+> npm login
+Username: jdg71nl
+Password: 
+Email: (this IS public) john@de-graaff.net
+Logged in as jdg71nl on https://registry.npmjs.org/.
+--[CWD=~/dev/jifdb(git:main)]--[1633589484 08:51:24 Thu 07-Oct-2021 CEST]--[jdg@rpi3-dev-83]--[hw:RPI3b+1.3,os:Raspbian-10/buster,kernel:5.10.17-v7+,isa:armv7l]------
+
+
+--[CWD=~/dev/jifdb(git:main)]--[1633589925 08:58:45 Thu 07-Oct-2021 CEST]--[jdg@rpi3-dev-83]--[hw:RPI3b+1.3,os:Raspbian-10/buster,kernel:5.10.17-v7+,isa:armv7l]------
+> npm publish
+npm notice 
+npm notice jifdb@1.0.0
+npm notice === Tarball Contents === 
+npm notice 11.4kB LICENSE              
+npm notice 5.7kB  index.js             
+npm notice 3.0kB  test/test.js         
+npm notice 686B   package.json         
+npm notice 0      test/jifdb/users.json
+npm notice 108B   README.md            
+npm notice === Tarball Details === 
+npm notice name:          jifdb                                   
+npm notice version:       1.0.0                                   
+npm notice package size:  6.7 kB                                  
+npm notice unpacked size: 20.9 kB                                 
+npm notice shasum:        da0344c6351666979a499defc6f32d9aa0c7c565
+npm notice integrity:     sha512-SirEBVyQrkbkD[...]8owB4LQoV3LkA==
+npm notice total files:   6                                       
+npm notice 
++ jifdb@1.0.0
+--[CWD=~/dev/jifdb(git:main)]--[1633589947 08:59:07 Thu 07-Oct-2021 CEST]--[jdg@rpi3-dev-83]--[hw:RPI3b+1.3,os:Raspbian-10/buster,kernel:5.10.17-v7+,isa:armv7l]------
+
+#
+https://www.npmjs.com/package/jifdb
+
+#
+npm version minor
+npm publish
+
+--[CWD=~/dev/jifdb(git:main)]--[1633597301 11:01:41 Thu 07-Oct-2021 CEST]--[jdg@rpi3-dev-83]--[hw:RPI3b+1.3,os:Raspbian-10/buster,kernel:5.10.17-v7+,isa:armv7l]------
+> npm version minor
+v1.1.0
+--[CWD=~/dev/jifdb(git:main)]--[1633597310 11:01:50 Thu 07-Oct-2021 CEST]--[jdg@rpi3-dev-83]--[hw:RPI3b+1.3,os:Raspbian-10/buster,kernel:5.10.17-v7+,isa:armv7l]------
+> npm publish
+npm notice 
+npm notice jifdb@1.1.0
+npm notice === Tarball Contents === 
+npm notice 11.4kB LICENSE                             
+npm notice 0      test/jifdb/users.json.1633593071.bak
+npm notice 0      test/jifdb/users.json.1633593507.bak
+npm notice 0      test/jifdb/users.json.1633593688.bak
+npm notice 0      test/jifdb/users.json.1633593873.bak
+npm notice 0      test/jifdb/users.json.1633594205.bak
+npm notice 0      test/jifdb/users.json.1633594273.bak
+npm notice 275B   test/jifdb/users.json.1633594708.bak
+npm notice 275B   test/jifdb/users.json.1633596158.bak
+npm notice 275B   test/jifdb/users.json.1633596852.bak
+npm notice 275B   test/jifdb/users.json.1633596906.bak
+npm notice 275B   test/jifdb/users.json.1633596919.bak
+npm notice 275B   test/jifdb/users.json.1633596945.bak
+npm notice 275B   test/jifdb/users.json.1633596970.bak
+npm notice 275B   test/jifdb/users.json.1633597033.bak
+npm notice 275B   test/jifdb/users.json.1633597053.bak
+npm notice 275B   test/jifdb/users.json.1633597171.bak
+npm notice 275B   test/jifdb/users.json.1633597185.bak
+npm notice 275B   test/jifdb/users.json.1633597213.bak
+npm notice 7.5kB  index.js                            
+npm notice 4.4kB  test/test.js                        
+npm notice 686B   package.json                        
+npm notice 275B   test/jifdb/users.json               
+npm notice 1.1kB  README.md                           
+npm notice === Tarball Details === 
+npm notice name:          jifdb                                   
+npm notice version:       1.1.0                                   
+npm notice package size:  7.9 kB                                  
+npm notice unpacked size: 28.7 kB                                 
+npm notice shasum:        166e6a98ebb536a4c252a565c6f5eda326282b6f
+npm notice integrity:     sha512-tQTA2uKBjl6Iw[...]66NQ0o6u4pCRQ==
+npm notice total files:   24                                      
+npm notice 
++ jifdb@1.1.0
+--[CWD=~/dev/jifdb(git:main)]--[1633597322 11:02:02 Thu 07-Oct-2021 CEST]--[jdg@rpi3-dev-83]--[hw:RPI3b+1.3,os:Raspbian-10/buster,kernel:5.10.17-v7+,isa:armv7l]------
+
+
+# - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - - - - - - - + + + - - - - - - 
 #-EOF
