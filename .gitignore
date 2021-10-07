@@ -3,7 +3,7 @@
 *.bin
 node_modules/
 #db/*
-db/
-!db/.keep
+#!db/.keep
+jifdb/
 code/
 #-EOF

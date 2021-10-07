@@ -34,8 +34,9 @@ const path = require('path');
 // const users = require('../app').users;
 // const jif_db = require('../jifdb').jif_db;
 // let users = jif_db.get_collection({collection_name: "users"});
-const jif_db = require('../jifdb');
-let users = jif_db.get_collection({collection_name: "users"});
+// const jif_db = require('../jifdb');
+const jif_db = require('jifdb');
+let users = jif_db.open_collection({collection_name: "users"});
 // console.log(`# jfdb=${jfdb} `);
 
 userRouter.get('/', async (req, res) => {
@@ -51,7 +52,7 @@ userRouter.get('/', async (req, res) => {
     // get_users = [{placeholder:true}];
     // get_users = users.chain().find().simplesort('firstname').data();
     // get_users = low_db.users || [];
-    get_users = users.data;
+    get_users = users.read({});
     res.send(get_users);
   } catch(err) {
     console.log("error " + err);
@@ -84,7 +85,7 @@ userRouter.get('/:id', async (req, res) => {
   // const get_user = {placeholder:true, id:req_params_id};
   // const get_user = low_db.users.find({id: req_params_id});
   // const get_user = db.chain.get('users').find({ id: req_params_id }).value() // Important: value() needs to be called to execute chain
-  const get_user = users.data.find(item => item.id == id);
+  const get_user = users.read({id:req_params_id});
   if (!get_user) return res.status(404).send('The User with the given ID was not found.');
   res.send(get_user);
 });
@@ -110,7 +111,8 @@ userRouter.post('/', async (req, res) => {
     // const new_user = new_user_hash;
     // low_db.data.users.push(new_user);
     // await low_db.write();
-    let new_user = users.add_item(new_user_hash);
+    // let new_user = users.add_item(new_user_hash);
+    let new_user = users.create({item:new_user_hash});
     res.send(new_user);
   } catch(err) {
     console.log("error " + err);

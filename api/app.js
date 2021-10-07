@@ -32,8 +32,8 @@ var logger = require('morgan');
 // jif_db.open_database();
 // let users = jif_db.get_collection({collection_name: "users"});
 // // console.log(`# jfdb=${jfdb} `);
-const jif_db = require('./jifdb');
-jif_db.open_database({ db_path: path.join(__dirname, 'db') });
+const jif_db = require('jifdb');
+jif_db.open_database({ db_path: path.join(__dirname, 'jifdb') });
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
